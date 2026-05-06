@@ -1,23 +1,27 @@
 # Agent TARS Experiment — Makefile
-# Sources .env if present; prints a message if not found for run-* targets.
 
--include .env
-export
+# Load .env into Make variables and export them to the shell if the file exists.
+ifneq ($(wildcard .env),)
+  include .env
+  export
+endif
 
 REPO_URL  := https://github.com/bytedance/UI-TARS-desktop
 REPO_DIR  := agent-tars-cli
 NODE_MIN  := 22
 
-.PHONY: help install run-anthropic run-openai run-volcengine update clean nuke
+.PHONY: help install test test-smoke test-research \
+        run-anthropic run-openai run-volcengine \
+        update clean nuke
 
 ## help: Print available targets with descriptions (default).
 help:
 	@echo "Usage: make <target>"
 	@echo ""
 	@echo "Targets:"
-	@grep -E '^## ' $(MAKEFILE_LIST) | sed 's/^## /  /'
+	@grep -E '^## ' Makefile | sed 's/^## /  /'
 
-## install: Shallow-clone the upstream repo if missing. Verify Node >= 22.
+## install: Clone upstream repo if missing, install npm deps, verify Node >= 22.
 install:
 	@node_ver=$$(node --version 2>/dev/null | sed 's/v//;s/\..*//') ; \
 	if [ -z "$$node_ver" ]; then \
@@ -33,25 +37,38 @@ install:
 		echo "Cloning $(REPO_URL) ..."; \
 		git clone --depth=1 "$(REPO_URL)" "$(REPO_DIR)"; \
 	fi
-	@echo "Done. Run 'make run-anthropic' (or openai / volcengine) to start."
+	npm install
+	@echo "Done. Run 'make test' or 'make run-anthropic'."
 
-## run-anthropic: Run Agent TARS CLI with Anthropic (claude-3-7-sonnet-latest).
+## test: Run all BDD feature scenarios.
+test:
+	npm test
+
+## test-smoke: Run @smoke scenarios only (fast connectivity check).
+test-smoke:
+	npm run test:smoke
+
+## test-research: Run @research scenarios only.
+test-research:
+	npm run test:research
+
+## run-anthropic: Run Agent TARS CLI interactively with Anthropic (claude-sonnet-4-5).
 run-anthropic: _check-env-anthropic
-	npx @agent-tars/cli@latest \
+	./node_modules/.bin/agent-tars \
 		--provider anthropic \
-		--model claude-3-7-sonnet-latest \
+		--model claude-sonnet-4-5 \
 		--apiKey $$ANTHROPIC_API_KEY
 
-## run-openai: Run Agent TARS CLI with OpenAI (gpt-4o).
+## run-openai: Run Agent TARS CLI interactively with OpenAI (gpt-4o).
 run-openai: _check-env-openai
-	npx @agent-tars/cli@latest \
+	./node_modules/.bin/agent-tars \
 		--provider openai \
 		--model gpt-4o \
 		--apiKey $$OPENAI_API_KEY
 
-## run-volcengine: Run Agent TARS CLI with Volcengine / Doubao.
+## run-volcengine: Run Agent TARS CLI interactively with Volcengine / Doubao.
 run-volcengine: _check-env-volcengine
-	npx @agent-tars/cli@latest \
+	./node_modules/.bin/agent-tars \
 		--provider volcengine \
 		--model doubao-1-5-thinking-vision-pro-250428 \
 		--apiKey $$VOLC_API_KEY
@@ -63,9 +80,9 @@ update:
 	fi
 	git -C "$(REPO_DIR)" pull --ff-only
 
-## clean: Remove any stray caches or node_modules.
+## clean: Remove node_modules and stray caches.
 clean:
-	rm -rf node_modules .npm $(REPO_DIR)/node_modules $(REPO_DIR)/.turbo
+	rm -rf node_modules .npm reports/ $(REPO_DIR)/node_modules $(REPO_DIR)/.turbo
 
 ## nuke: clean + remove the cloned agent-tars-cli/ directory.
 nuke: clean

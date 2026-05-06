@@ -1,0 +1,38 @@
+diff --git a/node_modules/@agent-tars/core/dist/index.js b/node_modules/@agent-tars/core/dist/index.js
+index 1f7b0d4..d0bf2a7 100644
+--- a/node_modules/@agent-tars/core/dist/index.js
++++ b/node_modules/@agent-tars/core/dist/index.js
+@@ -104673,14 +104673,14 @@ ${structuredOutputInstructions}`;
+                     };
+                     currentParams.push(toolResult);
+                 } else if ('assistant' === message.role) {
+-                    if ('string' == typeof message.content) currentParams.push({
++                    if ('string' == typeof message.content && message.content) currentParams.push({
+                         text: message.content,
+                         type: 'text'
+                     });
+                     if (Array.isArray(message.tool_calls)) {
+                         const convertedContent = message.tool_calls.map((toolCall)=>({
+                                 id: toolCall.id,
+-                                input: JSON.parse(toolCall.function.arguments),
++                                input: JSON.parse(toolCall.function.arguments || "{}"),
+                                 name: toolCall.function.name,
+                                 type: 'tool_use'
+                             }));
+@@ -119216,14 +119216,14 @@ ${structuredOutputInstructions}`;
+                     };
+                     currentParams.push(toolResult);
+                 } else if ('assistant' === message.role) {
+-                    if ('string' == typeof message.content) currentParams.push({
++                    if ('string' == typeof message.content && message.content) currentParams.push({
+                         text: message.content,
+                         type: 'text'
+                     });
+                     if (Array.isArray(message.tool_calls)) {
+                         const convertedContent = message.tool_calls.map((toolCall)=>({
+                                 id: toolCall.id,
+-                                input: JSON.parse(toolCall.function.arguments),
++                                input: JSON.parse(toolCall.function.arguments || "{}"),
+                                 name: toolCall.function.name,
+                                 type: 'tool_use'
+                             }));

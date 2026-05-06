@@ -1,0 +1,17 @@
+{
+  "name": "agent-tars-experiment",
+  "version": "0.1.0",
+  "description": "BDD experiment sandbox for Agent TARS CLI",
+  "private": true,
+  "scripts": {
+    "test": "cucumber-js",
+    "test:smoke": "cucumber-js --tags @smoke",
+    "test:research": "cucumber-js --tags @research",
+    "postinstall": "patch-package"
+  },
+  "devDependencies": {
+    "@agent-tars/cli": "latest",
+    "@cucumber/cucumber": "^11.3.0",
+    "patch-package": "^8.0.1"
+  }
+}

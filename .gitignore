@@ -9,6 +9,9 @@ node_modules/
 .npm/
 .turbo/
 
+# Test reports
+reports/
+
 # macOS
 .DS_Store
 
