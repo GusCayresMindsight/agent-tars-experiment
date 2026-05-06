@@ -10,6 +10,10 @@ are the execution layer. The CLI (`@agent-tars/cli`) is model-agnostic — this 
 wires it to Anthropic, OpenAI, and Volcengine (Doubao). Upstream:
 <https://github.com/bytedance/UI-TARS-desktop>
 
+**🆕 Notion MCP Integration:** This project now includes a fully configured Notion MCP server,
+allowing AI assistants to interact with your Notion workspace. See [Notion Integration Guide](./NOTION_INTEGRATION.md)
+for setup instructions.
+
 ## Prerequisites
 
 - Node.js ≥ 22 and npm
@@ -62,9 +66,33 @@ Makefile                      # 3rd — run targets
 | `clean` | Remove `node_modules`, caches, reports |
 | `nuke` | `clean` + delete the `agent-tars-cli/` checkout |
 
+## Notion MCP Integration
+
+This project includes a pre-configured Notion MCP server for AI-powered Notion interactions:
+
+```bash
+# Quick test
+npm run notion:test
+
+# Start MCP server
+npm run notion:server
+
+# View setup guide
+npm run notion:setup
+```
+
+**Documentation:**
+- [Quick Reference](./NOTION_QUICK_REFERENCE.md) - Commands and common usage
+- [Setup Guide](./NOTION_MCP_SETUP.md) - Client configuration instructions
+- [Integration Guide](./NOTION_INTEGRATION.md) - Complete documentation
+
+**Configuration:** Your Notion credentials are in `.env` (gitignored). The MCP config
+file `mcp-config.json` can be copied to Claude Desktop, Cursor, or other MCP clients.
+
 ## Links
 
 - Upstream repo: <https://github.com/bytedance/UI-TARS-desktop>
 - Agent TARS site: <https://agent-tars.com>
 - UI-TARS paper: <https://arxiv.org/abs/2501.12326>
 - UI-TARS-2 paper: <https://arxiv.org/abs/2509.02544>
+- Notion MCP Server: <https://www.npmjs.com/package/@notionhq/notion-mcp-server>

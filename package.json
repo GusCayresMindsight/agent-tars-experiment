@@ -7,11 +7,17 @@
     "test": "cucumber-js",
     "test:smoke": "cucumber-js --tags @smoke",
     "test:research": "cucumber-js --tags @research",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "notion:test": "./test-notion-simple.sh",
+    "notion:server": "npx @notionhq/notion-mcp-server",
+    "notion:server:http": "npx @notionhq/notion-mcp-server --transport http --port 3000",
+    "notion:setup": "cat NOTION_MCP_SETUP.md"
   },
   "devDependencies": {
     "@agent-tars/cli": "latest",
     "@cucumber/cucumber": "^11.3.0",
+    "@notionhq/notion-mcp-server": "^2.2.1",
+    "dotenv": "^17.4.2",
     "patch-package": "^8.0.1"
   }
 }
