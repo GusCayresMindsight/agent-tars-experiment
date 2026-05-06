@@ -1,0 +1,19 @@
+# Secrets — never commit
+.env
+
+# Externally sourced reference checkout — not a vendored dep
+agent-tars-cli/
+
+# Runtime artefacts
+node_modules/
+.npm/
+.turbo/
+
+# macOS
+.DS_Store
+
+# Editor cruft
+.vscode/
+.idea/
+*.swp
+*~
